@@ -2,13 +2,11 @@ from .cfgutils import *
 
 params = [
     ("config", "config to load (will be overwritten by args)", str),
-    ("load_from_checkpoint", "", str),
+    ("load_from_checkpoint", "checkpoint to load", str),
     # program_params:
     ("name", "name of experiments"),
     ("seed", "random seed", int),
-    ("src", "source dataset", str),
-    ("tgt", "target dataset", str),
-    ("n_class", "n_class", str),
+    ("n_class", "n_class", int),
     # epoch_params:
     # logger_params:
     # augmentation_params:
@@ -18,18 +16,14 @@ params = [
     # model_params:
     ("model", "name of model"),
     ("model_args", "dict"),
-    ("criterion", ""),
-    ("load_weight", "", bool),
+    ("criterion", "criterion function to use", str),
     # loss_params:
     # optim_params:
-    ("optimizer", "", str),
+    ("optimizer", "which optimizer to use", str),
     ("lr", "learning rate", float),
-    ("poly_decay", "", bool),
-    ("warmup_lr", "", float),
     # train_params:
-    ("batch_size", "batch size", int),
+    ("batch_size", "batch size (bs = num_gpus * batch_size if DDP)", int),
     ("num_workers", "number of workers to use for data loader", int),
-    ("superpixel", "", bool),
 ]
 
 
