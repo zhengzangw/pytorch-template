@@ -9,7 +9,7 @@ import torchmetrics
 from .models import get_model
 
 
-class LitPCSS(pl.LightningDataModule):
+class LitProject(pl.LightningDataModule):
     def __init__(self, cfgs):
         super().__init__()
         self.save_hyperparameters(cfgs)
