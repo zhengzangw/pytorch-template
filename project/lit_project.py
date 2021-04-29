@@ -7,6 +7,7 @@ import torch.optim as optim
 import torchmetrics
 
 from .models import get_model
+from .utils import GradualWarmupScheduler
 
 
 class LitProject(pl.LightningModule):
@@ -33,7 +34,7 @@ class LitProject(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         imgs, labels = batch
-        
+
         # loss
         logits = self.model(imgs)
         loss = self.criterion(logits, labels)
@@ -42,7 +43,7 @@ class LitProject(pl.LightningModule):
         # metric
         pred = logits.argmax(dim=1)
         metric = self.train_metrics(pred, labels)
-        self.log_dict(metric, prog_bar=True)
+        self.log_dict(metric)
 
         return loss
 
@@ -99,7 +100,19 @@ class LitProject(pl.LightningModule):
             raise NotImplementedError
 
         # Sched
-        schs = []
+        if self.cfgs.scheduler == "step":
+            sch = optim.lr_scheduler.MultiStepLR(optimizer, **self.cfgs.scheduler_args)
+        elif self.cfgs.scheduler == "cosine":
+            sch = optim.lr_scheduler.CosineAnnealingLR(
+                optimizer, T_max=self.cfgs.max_epochs
+            )
+        else:
+            raise NotImplementedError
 
-        return [optimizer], schs
+        if self.cfgs.warmup:
+            sch = GradualWarmupScheduler(
+                optimizer, multiplier=1, total_epoch=5, after_scheduler=sch
+            )
+
+        return [optimizer], [sch]
 

@@ -1,0 +1,28 @@
+name: debug
+seed: 1337
+
+# ----------
+# dataset
+# ----------
+dataset: cifar10
+# ----------
+# model
+# ----------
+model: preact_resnet18_cifar10
+criterion: cross_entropy
+# ----------
+# optim
+# ----------
+optimizer: SGD
+lr: 0.1
+scheduler: step
+scheduler_args:
+  milestones: [150, 250]
+warmup: true
+# ----------
+# performance
+# ----------
+max_epochs: 350
+batch_size: 128
+num_workers: 4
+# acc = 95.11% reported in https://github.com/C3-ASV-Team/pytorch-cifar

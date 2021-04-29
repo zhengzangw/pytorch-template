@@ -18,5 +18,6 @@ lr: 1.e-3
 # ----------
 # performance
 # ----------
+max_epochs: 10
 batch_size: 64
 num_workers: 4

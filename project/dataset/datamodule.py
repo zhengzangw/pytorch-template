@@ -3,14 +3,14 @@ import torchvision
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+from ..augmentation import get_aug
+
 
 def get_dst(name, split="train"):
     assert split in ["train", "val", "test"]
 
     if name == "mnist":
-        mnist_transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
-        )
+        mnist_transform = get_aug(name)
         if split == "train":
             return torchvision.datasets.MNIST(
                 "./data/mnist", train=True, transform=mnist_transform, download=True
@@ -18,6 +18,23 @@ def get_dst(name, split="train"):
         else:
             return torchvision.datasets.MNIST(
                 "./data/mnist", train=False, transform=mnist_transform, download=True
+            )
+    elif name == "cifar10":
+        transform_train = get_aug("cifar10_train")
+        transform_test = get_aug("cifar10_test")
+        if split == "train":
+            return torchvision.datasets.CIFAR10(
+                root="./data/cifar10",
+                train=True,
+                download=True,
+                transform=transform_train,
+            )
+        else:
+            return torchvision.datasets.CIFAR10(
+                root="./data/cifar10",
+                train=False,
+                download=True,
+                transform=transform_test,
             )
     else:
         raise NotImplementedError

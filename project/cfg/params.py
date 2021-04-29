@@ -16,11 +16,14 @@ params = [
     ("dataset", "name of dataset", str),
     # model_params:
     ("model", "name of model"),
-    ("model_args", "dict"),
+    ("model_args", "dict, args for model"),
     ("criterion", "criterion function to use", str),
     # loss_params:
     # optim_params:
     ("optimizer", "which optimizer to use", str),
+    ("scheduler", "which schduler to use", str),
+    ("scheduler_args", "dict, args for schedular"),
+    ("warmup", "if use warmup", bool),
     ("lr", "learning rate", float),
     # train_params:
     ("batch_size", "batch size (bs = num_gpus * batch_size if DDP)", int),

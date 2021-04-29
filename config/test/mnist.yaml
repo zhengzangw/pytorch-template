@@ -4,7 +4,7 @@ seed: 1337
 # ----------
 # dataset
 # ----------
-
+dataset: mnist
 # ----------
 # model
 # ----------
@@ -14,9 +14,10 @@ criterion: cross_entropy
 # optim
 # ----------
 optimizer: Adam
-lr: 0.1
+lr: 1.e-3
 # ----------
 # performance
 # ----------
+max_epochs: 10
 batch_size: 64
 num_workers: 4
