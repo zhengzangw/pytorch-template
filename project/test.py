@@ -7,8 +7,8 @@ import torch
 from pytorch_lightning.plugins import DDPPlugin
 
 from project import cfg
-from project.dataset import DADataModule
-from project.lit_pcss import LitPCSS
+from project.dataset import DataModule
+from project.lit_project import LitProject
 from project.utils import callbacks
 
 
@@ -28,7 +28,7 @@ def cli_main():
     # ------------
     # data
     # ------------
-    dm = DADataModule(cfgs)
+    dm = DataModule(cfgs)
 
     # ------------
     # model
