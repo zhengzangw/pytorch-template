@@ -1,11 +1,29 @@
 import pytorch_lightning as pl
 import torchvision
 from torch.utils.data import DataLoader
+from torchvision import transforms
+
+
+def get_dst(name, split="train"):
+    assert split in ["train", "val", "test"]
+
+    if name == "mnist":
+        mnist_transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        )
+        if split == "train":
+            return torchvision.datasets.MNIST(
+                "./data/mnist", train=True, transform=mnist_transform, download=True
+            )
+        else:
+            return torchvision.datasets.MNIST(
+                "./data/mnist", train=False, transform=mnist_transform, download=True
+            )
+    else:
+        raise NotImplementedError
 
 
 class DataModule(pl.LightningDataModule):
-    has_teardown_None = False  # a bug on pl-1.2
-
     def __init__(self, cfgs, pin_memory=True):
         super().__init__()
         self.cfgs = cfgs
@@ -13,10 +31,10 @@ class DataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
         if stage == "fit" or stage is None:
-            self.train_dst = None
-            self.val_dst = None
+            self.train_dst = get_dst(self.cfgs.dataset, split="train")
+            self.val_dst = get_dst(self.cfgs.dataset, split="val")
         elif stage == "test" or stage is None:
-            self.test_dst = None
+            self.test_dst = get_dst(self.cfgs.dataset, split="test")
 
     def train_dataloader(self):
         train_loader = DataLoader(

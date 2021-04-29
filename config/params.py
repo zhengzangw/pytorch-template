@@ -13,6 +13,7 @@ params = [
     ("size", "resize images"),
     ("augmentations", "augs"),
     # dataset_params:
+    ("dataset", "name of dataset", str),
     # model_params:
     ("model", "name of model"),
     ("model_args", "dict"),

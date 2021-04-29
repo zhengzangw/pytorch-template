@@ -9,7 +9,7 @@ import torchmetrics
 from .models import get_model
 
 
-class LitProject(pl.LightningDataModule):
+class LitProject(pl.LightningModule):
     def __init__(self, cfgs):
         super().__init__()
         self.save_hyperparameters(cfgs)
@@ -20,7 +20,7 @@ class LitProject(pl.LightningDataModule):
         self.criterion = get_model(cfgs.criterion)()
 
         # metrics
-        metrics = torchmetrics.Accuracy()
+        metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy()])
         self.train_metrics = metrics.clone(prefix="train/")
         self.val_metrics = metrics.clone(prefix="val/")
 
@@ -33,20 +33,18 @@ class LitProject(pl.LightningDataModule):
 
     def training_step(self, batch, batch_idx):
         imgs, labels = batch
+        
+        # loss
         logits = self.model(imgs)
         loss = self.criterion(logits, labels)
+        self.log("train/loss", loss)
 
         # metric
         pred = logits.argmax(dim=1)
-        self.train_metrics(pred, labels)
-        self.log("train/loss", loss)
+        metric = self.train_metrics(pred, labels)
+        self.log_dict(metric, prog_bar=True)
 
         return loss
-
-    def training_epoch_end(self, outputs):
-        # a bug in pl-1.2: metric not auto reset
-        self.log(self.train_metrics.compute(), prog_bar=True)
-        self.train_metrics.reset()
 
     # ------------
     # validation
@@ -62,12 +60,10 @@ class LitProject(pl.LightningDataModule):
 
         # metric
         pred = logits.argmax(dim=1)
-        self.val_metrics(pred, labels)
+        metric = self.val_metrics(pred, labels)
+        self.log_dict(metric, prog_bar=True)
 
-    def validation_epoch_end(self, outputs):
-        # a bug in pl-1.2: metric not auto reset
-        self.log(self.val_metrics.compute(), prog_bar=True)
-        self.val_metrics.reset()
+        return loss
 
     # ------------
     # test

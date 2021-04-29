@@ -1,8 +1,15 @@
 import torch.nn as nn
 from torchvision import models
 
+from .toy import *
+
 DICT = {
-    # model_backbone
+    # model
+    # - classification
+    "toy_conv": toy_conv,
+    "resnet18": models.resnet18,
+    "resnet50": models.resnet50,
+    # - segmentation
     "fcn_resnet50": models.segmentation.fcn_resnet50,
     "fcn_resnet101": models.segmentation.fcn_resnet101,
     "deeplabv3_resnet50": models.segmentation.deeplabv3_resnet50,
@@ -13,4 +20,5 @@ DICT = {
 
 
 def get_model(name):
+    assert name in DICT, f"model {name} is not implemented!"
     return DICT[name]

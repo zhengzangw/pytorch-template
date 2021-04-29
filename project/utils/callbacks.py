@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def callbacks(args, monitor="val/accuracy"):
+def callbacks(args, monitor="val/Accuracy"):
     callbacks_list = []
 
     # log learning rate

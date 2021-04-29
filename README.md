@@ -22,7 +22,7 @@ Conference
 
 ## Description
 
-What it does
+TBD
 
 ## How to run
 
@@ -30,22 +30,24 @@ First, install dependencies
 
 ```bash
 # clone project
-git clone https://github.com/YourGithubName/deep-learning-project-template
+git clone https://github.com/zhengzangw/this_project
 
 # install project
-cd deep-learning-project-template
+cd this_project
 pip install -e .
 pip install -r requirements.txt
 ```
 
-Next, navigate to any file and run it.
+Next, run the training or testing script.
 
 ```bash
-# module folder
 cd project
 
-# run module (example: mnist as your main contribution)
-python lit_classifier_main.py
+# train
+python -m project.train --config config/debug.yaml
+
+# test
+python -m project.train --config config/test.yaml
 ```
 
 ## Imports
