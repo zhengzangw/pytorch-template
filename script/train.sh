@@ -16,7 +16,8 @@
 
 export NCCL_DEBUG=INFO
 export PYTHONFAULTHANDLER=1
+export CONDA_PYTHON=/global/homes/z/zangwei/.conda/envs/pcss
 
-conda activate /global/homes/z/zangwei/.conda/envs/pcss
+conda activate $CONDA_PYTHON
 
 srun python -m project.train $@

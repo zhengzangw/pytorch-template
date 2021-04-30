@@ -36,6 +36,34 @@ def get_dst(name, split="train"):
                 download=True,
                 transform=transform_test,
             )
+    elif name == "cifar100":
+        transform_train = get_aug("cifar100_train")
+        transform_test = get_aug("cifar100_test")
+        if split == "train":
+            return torchvision.datasets.CIFAR10(
+                root="./data/cifar100",
+                train=True,
+                download=True,
+                transform=transform_train,
+            )
+        else:
+            return torchvision.datasets.CIFAR10(
+                root="./data/cifar100",
+                train=False,
+                download=True,
+                transform=transform_test,
+            )
+    elif name == "imagenet":
+        transform_train = get_aug("imagenet_train")
+        transform_test = get_aug("imagenet_test")
+        if split == "train":
+            return torchvision.datasets.ImageFolder(
+                root="./data/imagenet/train", transform=transform_train,
+            )
+        else:
+            return torchvision.datasets.ImageFolder(
+                root="./data/imagenet/val", transform=transform_test,
+            )
     else:
         raise NotImplementedError
 
